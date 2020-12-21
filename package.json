@@ -1,0 +1,23 @@
+{
+  "name": "chargin",
+  "version": "1.0.0",
+  "description": "chargin stetion",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js ",
+    "server": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "osereda",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^5.3.0",
+    "config": "^3.3.1",
+    "express": "^4.17.1",
+    "mongodb": "^3.1.0",
+    "mongoose": "^5.11.8",
+    "nodemon": "^2.0.4"
+  }
+}
