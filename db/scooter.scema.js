@@ -3,10 +3,9 @@ const Schema = mongoose.Schema;
 
 const scooterScheme = new Schema(
     {
-        station_id: Number,
-        slot_id: Number,
         scooter_id: Number,
-        slot_status : Number
+        scooter_type: String,
+        scooter_operator: String
     },
     {versionKey: false}
 );

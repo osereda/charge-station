@@ -2,9 +2,9 @@ const querystring = require('querystring');
 const url = require('url');
 const {Router} = require('express');
 const router = Router();
-const Station = require('../db/station.scema');
+const Station = require('../db/slot.scema');
 
-router.get("/stationStatus/:id", (req, res) => {
+router.get("/:id", (req, res) => {
 
     res.set('Access-Control-Allow-Origin', '*');
 
@@ -18,31 +18,27 @@ router.get("/stationStatus/:id", (req, res) => {
     if(req.params.id) {
         const param = req.params.id.replace(/\s/g, '');
         let count = (param.match(/&/g) || []).length;
-        stationId = parseInt(param.split('&')[0].split('x')[1], 2);
 
-        for(let i = 1; i < count; ) {
-            slotId = parseInt(param.split('&')[i++].split('x')[1], 2);
-            scooterId = parseInt(param.split('&')[i++].split('x')[1], 2);
+        for(let i = 0; i < count; ) {
+            slotId = parseInt(param.split('&')[i++].split('x')[1], 3);
+            scooterId = parseInt(param.split('&')[i++].split('x')[1], 3);
             status = param.split('&')[i++].split('=')[1];
             slotPower = param.split('&')[i++].split('=')[1];
 
-            Station.updateOne({ station_id: stationId, slot_id: slotId},
+            Station.updateOne({ slot_id: slotId },
                 {
                     scooter_id: scooterId ? scooterId : 0,
                     slot_status: status ? status : 0,
                     slot_power: slotPower ? slotPower : 0
                 }).
                 then(stationStatus = 1).
-                catch(
-                err => console.log(err),
-                    res.status(500)
-            );
+                catch(err => console.log(err));
         }
-        res.send({st_id: stationId, st_comm: stationStatus});
+        res.send({status: stationStatus});
     }
 });
 
-router.get("/stations", (req, res) => {
+router.get("/slots", (req, res) => {
 
     const tmp = req.params;
     Station.find({}, (err, station) => {
@@ -55,7 +51,7 @@ router.get("/stations", (req, res) => {
     });
 });
 
-router.get("/station/:id", function(req, res){
+router.get("/slot/:id", function(req, res){
 
     const id = req.params.id;
     Station.findOne({station_id: id }, (err, station) => {
@@ -71,26 +67,22 @@ router.get("/station/:id", function(req, res){
     });
 });
 
-router.post("/station/add", (req, res) => {
+router.post("/slot/add", (req, res) => {
 
-    if(!req.body || !req.body.stationId ) res.status(400).send({ error: "invalid request, no body or id" });
-
-    Station.findOne({station_id: req.body.stationId, slot_id:req.body.slotId}, (err, stationIdFind) => {
+    Station.findOne({slot_id:req.body.slotId}, (err, stationIdFind) => {
         if(stationIdFind == null)
         {
-            const stationId = req.body.stationId;
             const slotId = req.body.slotId;
             const scooterId = req.body.scooterId;
             const slotStatus = req.body.slotStatus;
             const slotPower = req.body.slotPower ? req.body.slotPower : 0;
-            const location = req.body.location;
+            const scooterEvent = req.body.scooterEvent ? req.body.scooterEvent : 0;
             const station = new Station({
-                station_id: stationId,
                 slot_id: slotId,
                 scooter_id: scooterId,
                 slot_status: slotStatus,
                 slot_power: slotPower,
-                location : location,
+                scooter_event : scooterEvent,
             });
             station.save((err) => {
                 if(err) return res.status(500).send({ error: "cant save station in mongoDB" });
@@ -98,12 +90,12 @@ router.post("/station/add", (req, res) => {
             });
         }
         else {
-            res.status(400).send({ error: `Station id - ${req.body.stationId} already exist` });
+            res.status(400).send({ error: `Slot id - ${req.body.stationId} already exist` });
         }
     });
 });
 
-router.put("/station/update/charge", (req, res) => {
+router.put("/slot/update/charge", (req, res) => {
     if(!req.body) res.status(400).send({ error: "invalid request, no body" });
     const stationId = req.body.stationId;
     const slotPower = req.body.slotPower;
@@ -127,7 +119,7 @@ router.put("/station/update/charge", (req, res) => {
     }
 });
 
-router.delete("/station/:id", (req, res) => {
+router.delete("/slot/:id", (req, res) => {
 
     if(!req.params.id) return res.status(400).send({ error: "invalid request, id don't exist" });
     const stationId = req.params.id;
