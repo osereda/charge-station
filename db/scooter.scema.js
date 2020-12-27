@@ -11,6 +11,6 @@ const scooterScheme = new Schema(
     {versionKey: false}
 );
 
-const Scooter= mongoose.model("Station", scooterScheme);
+const Scooter= mongoose.model("Scooter", scooterScheme);
 
 module.exports = Scooter;

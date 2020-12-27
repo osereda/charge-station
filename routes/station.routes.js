@@ -3,8 +3,6 @@ const url = require('url');
 const {Router} = require('express');
 const router = Router();
 const Station = require('../db/station.scema');
-const Scooter = require('../db/scooter.scema');
-
 
 router.get("/stationStatus/:id", (req, res) => {
 
