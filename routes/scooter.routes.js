@@ -39,7 +39,6 @@ router.get("/:id", function(req, res){
 
             res.send({status: 1})
         });
-
     }
 });
 
