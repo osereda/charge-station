@@ -4,10 +4,11 @@ const Schema = mongoose.Schema;
 const stationScheme = new Schema(
         {
             station_id: Number,
-            status: String,
-            size_og_charge : Number,
-            pass : String,
-            add_inf : String
+            slot_id: Number,
+            scooter_id: Number,
+            slot_status: String,
+            slot_power : Number,
+            location : String
         },
         {versionKey: false}
     );

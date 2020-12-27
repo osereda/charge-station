@@ -1,9 +1,52 @@
+const querystring = require('querystring');
+const url = require('url');
 const {Router} = require('express');
 const router = Router();
 const Station = require('../db/station.scema');
+const Scooter = require('../db/scooter.scema');
+
+
+router.get("/stationStatus/:id", (req, res) => {
+
+    res.set('Access-Control-Allow-Origin', '*');
+
+    let stationId;
+    let slotId;
+    let scooterId;
+    let status;
+    let slotPower;
+    let stationStatus;
+
+    if(req.params.id) {
+        const param = req.params.id.replace(/\s/g, '');
+        let count = (param.match(/&/g) || []).length;
+        stationId = parseInt(param.split('&')[0].split('x')[1], 2);
+
+        for(let i = 1; i < count; ) {
+            slotId = parseInt(param.split('&')[i++].split('x')[1], 2);
+            scooterId = parseInt(param.split('&')[i++].split('x')[1], 2);
+            status = param.split('&')[i++].split('=')[1];
+            slotPower = param.split('&')[i++].split('=')[1];
+
+            Station.updateOne({ station_id: stationId, slot_id: slotId},
+                {
+                    scooter_id: scooterId ? scooterId : 0,
+                    slot_status: status ? status : 0,
+                    slot_power: slotPower ? slotPower : 0
+                }).
+                then(stationStatus = 1).
+                catch(
+                err => console.log(err),
+                    res.status(500)
+            );
+        }
+        res.send({st_id: stationId, st_comm: stationStatus});
+    }
+});
 
 router.get("/stations", (req, res) => {
 
+    const tmp = req.params;
     Station.find({}, (err, station) => {
         if(err)
         {
@@ -17,7 +60,7 @@ router.get("/stations", (req, res) => {
 router.get("/station/:id", function(req, res){
 
     const id = req.params.id;
-    Station.findOne({_id: id}, (err, station) => {
+    Station.findOne({station_id: id }, (err, station) => {
         if(err)
         {
             console.log(err);
@@ -34,20 +77,22 @@ router.post("/station/add", (req, res) => {
 
     if(!req.body || !req.body.stationId ) res.status(400).send({ error: "invalid request, no body or id" });
 
-    Station.findOne({station_id: req.body.stationId}, (err, stationIdFind) => {
+    Station.findOne({station_id: req.body.stationId, slot_id:req.body.slotId}, (err, stationIdFind) => {
         if(stationIdFind == null)
         {
             const stationId = req.body.stationId;
-            const statusOfStation = req.body.status;
-            const sizeOfCharge = req.body.sizeOfCharge ? req.body.sizeOfCharge : 0;
-            const passWord = req.body.passWord;
-            const addInf = req.body.addInf ? req.body.addInf : "-";
+            const slotId = req.body.slotId;
+            const scooterId = req.body.scooterId;
+            const slotStatus = req.body.slotStatus;
+            const slotPower = req.body.slotPower ? req.body.slotPower : 0;
+            const location = req.body.location;
             const station = new Station({
                 station_id: stationId,
-                status: statusOfStation,
-                size_og_charge : sizeOfCharge,
-                pass : passWord,
-                add_inf : addInf
+                slot_id: slotId,
+                scooter_id: scooterId,
+                slot_status: slotStatus,
+                slot_power: slotPower,
+                location : location,
             });
             station.save((err) => {
                 if(err) return res.status(500).send({ error: "cant save station in mongoDB" });
@@ -63,10 +108,11 @@ router.post("/station/add", (req, res) => {
 router.put("/station/update/charge", (req, res) => {
     if(!req.body) res.status(400).send({ error: "invalid request, no body" });
     const stationId = req.body.stationId;
-    const sizeOfCharge = req.body.sizeOfCharge;
-    const newStation = {size_og_charge: sizeOfCharge};
+    const slotPower = req.body.slotPower;
+    const newStation = {slot_power: slotPower};
 
     try {
+        //Station.updateOne({station_id: stationId}, { slot_power: slotPower});
         Station.findOneAndUpdate({station_id: stationId}, newStation, {new: true}, (err, station) => {
             if (err) {
                 return res.status(500).send({error: "cant update info in mongoDB"});

@@ -3,9 +3,11 @@ const mongoose = require("mongoose");
 const config = require('config');
 const bodyParser = require('body-parser');
 const app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use('/api/charge', require('./routes/charge.routes'));
+app.use('/api/charge', require('./routes/station.routes'));
+app.use('/api/scooter', require('./routes/scooter.routes'));
 
 const PORT = config.get('port') || 5000;
 
