@@ -6,8 +6,11 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use('/api/stStatus', require('./routes/slot.routes'));
-app.use('/api/scEvent', require('./routes/scooter.routes'));
+app.use('/api/stStatus', require('./routes/slot.hardware.routes'));
+app.use('/api/scEvent', require('./routes/scooter.hardware.routes'));
+app.use('/api/scooter', require('./routes/scooter.routes'));
+app.use('/api/slot', require('./routes/slot.routes'));
+
 
 const PORT = config.get('port') || 5000;
 

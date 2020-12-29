@@ -1,47 +1,11 @@
-const querystring = require('querystring');
-const url = require('url');
 const {Router} = require('express');
 const router = Router();
-const Station = require('../db/slot.scema');
-
-router.get("/:id", (req, res) => {
-
-    res.set('Access-Control-Allow-Origin', '*');
-
-    let stationId;
-    let slotId;
-    let scooterId;
-    let status;
-    let slotPower;
-    let stationStatus;
-
-    if(req.params.id) {
-        const param = req.params.id.replace(/\s/g, '');
-        let count = (param.match(/&/g) || []).length;
-
-        for(let i = 0; i < count; ) {
-            slotId = parseInt(param.split('&')[i++].split('x')[1], 3);
-            scooterId = parseInt(param.split('&')[i++].split('x')[1], 3);
-            status = param.split('&')[i++].split('=')[1];
-            slotPower = param.split('&')[i++].split('=')[1];
-
-            Station.updateOne({ slot_id: slotId },
-                {
-                    scooter_id: scooterId ? scooterId : 0,
-                    slot_status: status ? status : 0,
-                    slot_power: slotPower ? slotPower : 0
-                }).
-                then(stationStatus = 1).
-                catch(err => console.log(err));
-        }
-        res.send({status: stationStatus});
-    }
-});
+const Slot = require('../db/slot.scema');
 
 router.get("/slots", (req, res) => {
 
     const tmp = req.params;
-    Station.find({}, (err, station) => {
+    Slot.find({}, (err, station) => {
         if(err)
         {
             console.log(err);
@@ -54,7 +18,7 @@ router.get("/slots", (req, res) => {
 router.get("/slot/:id", function(req, res){
 
     const id = req.params.id;
-    Station.findOne({station_id: id }, (err, station) => {
+    Slot.findOne({station_id: id }, (err, station) => {
         if(err)
         {
             console.log(err);
@@ -69,7 +33,7 @@ router.get("/slot/:id", function(req, res){
 
 router.post("/slot/add", (req, res) => {
 
-    Station.findOne({slot_id:req.body.slotId}, (err, stationIdFind) => {
+    Slot.findOne({slot_id:req.body.slotId}, (err, stationIdFind) => {
         if(stationIdFind == null)
         {
             const slotId = req.body.slotId;
@@ -77,7 +41,7 @@ router.post("/slot/add", (req, res) => {
             const slotStatus = req.body.slotStatus;
             const slotPower = req.body.slotPower ? req.body.slotPower : 0;
             const scooterEvent = req.body.scooterEvent ? req.body.scooterEvent : 0;
-            const station = new Station({
+            const station = new Slot({
                 slot_id: slotId,
                 scooter_id: scooterId,
                 slot_status: slotStatus,
@@ -103,7 +67,7 @@ router.put("/slot/update/charge", (req, res) => {
 
     try {
         //Station.updateOne({station_id: stationId}, { slot_power: slotPower});
-        Station.findOneAndUpdate({station_id: stationId}, newStation, {new: true}, (err, station) => {
+        Slot.findOneAndUpdate({station_id: stationId}, newStation, {new: true}, (err, station) => {
             if (err) {
                 return res.status(500).send({error: "cant update info in mongoDB"});
             }
