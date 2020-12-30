@@ -14,7 +14,7 @@ router.get("/all", (req, res) => {
     });
 });
 
-router.get("/slot/:id", function(req, res){
+router.get("/sl/:id", (req, res) => {
     Slot.findOne({slot_id: req.params.id }, (err, slot) => {
         if(err)
         {
@@ -87,36 +87,38 @@ router.put("/update", (req, res) => {
 
 router.delete("/:id", (req, res) => {
     if(!req.params.id) return res.status(400).send({ error: "invalid request, id don't exist" });
-    Slot.findOne({scooter_id: req.body.slotId}, (err, slotIdFind) => {
+    Slot.findOne({slot_id: req.params.id}, (err, slotIdFind) => {
         if(err){
             console.log(err);
             return res.status(500).send({error: "cant delete slot in mongoDB"});
         }
         if(slotIdFind) {
             console.log(slotIdFind._id);
-            Slot.findByIdAndDelete(slotIdFind._id, (err, scooter) => {
+            Slot.findByIdAndDelete(slotIdFind._id, (err, slot) => {
                 if (err) {
                     console.log(err);
                     return res.status(500).send({error: "cant delete slot in mongoDB"});
                 }
-                if (scooter == null) {
+                if (slot == null) {
                     return res.status(400).send({error: `slot with id:  ${req.params.id} - don't exist`});
                 }
-                res.send(scooter);
+                res.send(slot);
             });
         }
-        return res.status(400).send({ error: "invalid request, id don't exist" });
+        else {
+            return res.status(400).send({error: "invalid request, id don't exist"});
+        }
     });
 });
 
 router.get("/init", (req, res) => {
-    let scooters = [
-            {slot_id: 10, scooter_id: 0, slot_status: 0, slot_power: 100, scooter_event: 0},
-            {slot_id: 11, scooter_id: 0, slot_status: 0, slot_power: 100, scooter_event: 0},
-            {slot_id: 12, scooter_id: 0, slot_status: 0, slot_power: 100, scooter_event: 0}
+    let slots = [
+            {slot_id: 0, scooter_id: 11, slot_status: 0, slot_power: 100, scooter_event: 0},
+            {slot_id: 1, scooter_id: 12, slot_status: 0, slot_power: 100, scooter_event: 0},
+            {slot_id: 2, scooter_id: 13, slot_status: 0, slot_power: 100, scooter_event: 0}
         ];
 
-    Slot.collection.insertMany(scooters, function (err, docs) {
+    Slot.collection.insertMany(slots, (err, docs) => {
         if (err) {
             return console.error(err);
         } else {
@@ -126,26 +128,14 @@ router.get("/init", (req, res) => {
     });
 });
 
-router.get("/refresh", (req, res) => {
-    let  slot;
-    let newSlotCollection = [
-        {slot_id: 10, newDate : {scooter_id: 10, slot_status: 0, slot_power: 1100, scooter_event: 1}},
-        {slot_id: 11, newDate : {scooter_id: 10, slot_status: 0, slot_power: 1100, scooter_event: 1}},
-        {slot_id: 12, newDate : {scooter_id: 10, slot_status: 0, slot_power: 1100, scooter_event: 1}}
-    ];
-
-    newSlotCollection.forEach((item) => {
-        Slot.updateOne({slot_id: item.slot_id}, item.newDate,(err, slot) => {
-            if (err) {
-                return res.status(500).send({error: "cant update info in mongoDB"});
-            }
-            if (slot == null) {
-                return res.status(400).send({error: `invalid slot id  - ${req.body.slotId}`});
-            }
-            //res.send(slot);
-        });
+router.get("/deleteall", (req, res) => {
+    Slot.remove({}, (err) => {
+        if(err) {
+            console.log("delete all error - " + err);
+            return res.status(500).send({error: "cant delete all in mongoDB"});
+        }
+        res.status(200).send("all slots hes deleted ");
     });
-    res.send(slot);
 });
 
 module.exports = router;

@@ -14,7 +14,7 @@ router.get("/all", (req, res) => {
     });
 });
 
-router.get("/:id", function(req, res){
+router.get("/sc/:id", (req, res) => {
     Scooter.findOne({scooter_id: req.params.id }, (err, slot) => {
         if(err)
         {
@@ -77,24 +77,55 @@ router.put("/update", (req, res) => {
 
 router.delete("/:id", (req, res) => {
     if(!req.params.id) return res.status(400).send({ error: "invalid request, id don't exist" });
-    Scooter.findOne({scooter_id: req.body.scooterId}, (err, scooterIdFind) => {
+    Scooter.findOne({scooter_id: req.params.id}, (err, scooterIdFind) => {
         if(err){
             console.log(err);
-            return res.status(500).send({error: "cant delete station in mongoDB"});
+            return res.status(500).send({error: "cant delete Scooter in mongoDB"});
         }
         if(scooterIdFind) {
             Scooter.findByIdAndDelete(scooterIdFind._id, (err, scooter) => {
                 if (err) {
                     console.log(err);
-                    return res.status(500).send({error: "cant delete station in mongoDB"});
+                    return res.status(500).send({error: "cant delete Scooter in mongoDB"});
                 }
                 if (scooter == null) {
-                    return res.status(400).send({error: `station with id:  ${req.params.id} - don't exist`});
+                    return res.status(400).send({error: `Scooter with id:  ${req.params.id} - don't exist`});
                 }
                 res.send(scooter);
             });
         }
-        return res.status(400).send({ error: "invalid request, id don't exist" });
+        else {
+            return res.status(400).send({error: "invalid request, id don't exist"});
+        }
+    });
+});
+
+router.get("/deleteall", (req, res) => {
+    Scooter.remove({}, (err) => {
+        if(err) {
+            console.log("delete all error - " + err);
+            return res.status(500).send({error: "cant delete all Scooter in mongoDB"});
+        }
+        res.status(200).send("all Scooter hes deleted ");
+    });
+});
+
+router.get("/init", (req, res) => {
+    let scooters = [
+        {scooter_id: 0, scooter_type: "type 1", scooter_operator: "operator 1"},
+        {scooter_id: 1, scooter_type: "type 1", scooter_operator: "operator 2"},
+        {scooter_id: 2, scooter_type: "type 1", scooter_operator: "operator 3"},
+        {scooter_id: 3, scooter_type: "type 2", scooter_operator: "operator 3"},
+        {scooter_id: 4, scooter_type: "type 2", scooter_operator: "operator 3"},
+    ];
+
+    Scooter.collection.insertMany(scooters, (err, docs) => {
+        if (err) {
+            return console.error(err);
+        } else {
+            console.log("new slots has inserted to collection Scooters");
+            res.send({msg : "slots has inserted to Scooters collection"});
+        }
     });
 });
 
