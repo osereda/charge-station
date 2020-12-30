@@ -10,7 +10,7 @@ router.get ("/:id", (req, res) => {
     let scooterId;
     let status;
     let slotPower;
-    let stationStatus;
+    let stationStatus = null;
     let newSlotCollection = [];
     let countOfSlot = 0;
 
@@ -34,17 +34,20 @@ router.get ("/:id", (req, res) => {
             newSlotCollection.push(tmp);
         }
         try {
+            stationStatus = null;
             newSlotCollection.forEach((item, i) => {
                 Slot.updateOne({slot_id: item.slot_id}, item.newDate, (err, slot) => {
                     if (err) {
-                        res.send({status: 0});
+                        stationStatus = 0;
                     }
                     if (slot == null || slot.nModified === 0) {
-                        res.send({status: 0});
+                        stationStatus = 0;
                     }
-                    if (i === countOfSlot - 1) {
-                        stationStatus = 1;
-                        res.send({status: stationStatus});
+                    if (i === countOfSlot - 1 && stationStatus !== 0) {
+                        res.send({status: 1});
+                    }
+                    if (i === countOfSlot - 1 && stationStatus === 0) {
+                        res.send({status: 0});
                     }
                 });
             });
