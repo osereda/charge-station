@@ -15,6 +15,7 @@ after start app:
   - update scooter from "hardware": GET - http://localhost:5000/api/scEvent/sl_id = 0x000 000 &
  sc_id = 0x0000 0000 &  sc_evt = 111111
  
+  - init scooters: GET - http://localhost:5000/api/scooter/init
   - all scooters: GET - http://localhost:5000/api/scooter/all
   - scooter by id: GET - http://localhost:5000/api/scooter/sc/0
   - add scooter: POST - http://localhost:5000/api/scooter/update 
@@ -34,7 +35,7 @@ after start app:
   - delete scooter with id = 0 : DELETE - 	http://localhost:5000/api/scooter/0
   - delete All scooters : GET - 	http://localhost:5000/api/scooter/deleteall
   
-  
+  - init slots: GET - http://localhost:5000/api/slot/init
   - all slot: GET - http://localhost:5000/api/slot/all
   - slot by id: GET - http://localhost:5000/api/slot/sc/0
   - add slot: POST - http://localhost:5000/api/slot/update 
@@ -55,4 +56,10 @@ after start app:
 	}
   - delete slot with id = 0 : DELETE - 	http://localhost:5000/api/slot/0
   - delete All slots : GET - 	http://localhost:5000/api/slot/deleteall
+  
+  
+  - init user: GET - http://localhost:5000/api/user/init
+  - all user: GET - http://localhost:5000/api/user/all
+  - user by id: GET - http://localhost:5000/api/user/us/0
+  
 	
