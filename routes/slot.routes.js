@@ -1,9 +1,9 @@
 const {Router} = require('express');
 const router = Router();
 const Slot = require('../db/slot.scema');
-var ObjectId = require('mongodb').ObjectID;
 
 router.get("/all", (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
     Slot.find({}, (err, slots) => {
         if(err)
         {
