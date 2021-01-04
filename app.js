@@ -11,6 +11,7 @@ app.use('/api/scEvent', require('./routes/scooter.hardware.routes'));
 app.use('/api/scooter', require('./routes/scooter.routes'));
 app.use('/api/slot', require('./routes/slot.routes'));
 app.use('/api/user', require('./routes/user.routes'));
+app.use('/api/station', require('./routes/station.routes'));
 
 
 

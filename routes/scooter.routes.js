@@ -4,7 +4,8 @@ const Slot = require('../db/slot.scema');
 const Scooter = require('../db/scooter.scema');
 
 router.get("/all", (req, res) => {
-    Slot.find({}, (err, station) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    Scooter.find({}, (err, station) => {
         if(err)
         {
             console.log(err);
