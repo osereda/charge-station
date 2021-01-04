@@ -16,7 +16,7 @@ router.get("/all", (req, res) => {
 });
 
 router.get("/sc/:id", (req, res) => {
-    Scooter.findOne({scooter_id: req.params.id }, (err, slot) => {
+    Scooter.findOne({sc_id: req.params.id }, (err, slot) => {
         if(err)
         {
             console.log(err);
@@ -30,16 +30,16 @@ router.get("/sc/:id", (req, res) => {
 });
 
 router.post("/add", (req, res) => {
-    Scooter.findOne({scooter_id: req.body.scooterId}, (err, scooterIdFind) => {
+    Scooter.findOne({sc_id: req.body.scooterId}, (err, scooterIdFind) => {
         if(scooterIdFind == null)
         {
             const scooterId = req.body.scooterId;
             const scooterType = req.body.scooterType;
             const scooterOperator = req.body.scooterOperator;
             const scooter = new Scooter({
-                scooter_id: scooterId,
-                scooter_type: scooterType,
-                scooter_operator: scooterOperator
+                sc_id: scooterId,
+                sc_type: scooterType,
+                sc_operator: scooterOperator
             });
             scooter.save((err) => {
                 if(err) return res.status(500).send({ error: "cant save station in mongoDB" });
@@ -78,7 +78,7 @@ router.put("/update", (req, res) => {
 
 router.delete("/:id", (req, res) => {
     if(!req.params.id) return res.status(400).send({ error: "invalid request, id don't exist" });
-    Scooter.findOne({scooter_id: req.params.id}, (err, scooterIdFind) => {
+    Scooter.findOne({sc_id: req.params.id}, (err, scooterIdFind) => {
         if(err){
             console.log(err);
             return res.status(500).send({error: "cant delete Scooter in mongoDB"});
@@ -113,12 +113,14 @@ router.get("/deleteall", (req, res) => {
 
 router.get("/init", (req, res) => {
     let scooters = [
-        {scooter_id: 0, scooter_type: "type 1", scooter_operator: "operator 1"},
-        {scooter_id: 1, scooter_type: "type 1", scooter_operator: "operator 2"},
-        {scooter_id: 2, scooter_type: "type 1", scooter_operator: "operator 3"},
-        {scooter_id: 3, scooter_type: "type 2", scooter_operator: "operator 3"},
-        {scooter_id: 4, scooter_type: "type 2", scooter_operator: "operator 3"},
+        {sc_id: 0, sc_type: "type 1", sc_operator: "operator 1", sc_pow: 100, sc_status: 0, sc_perm: 0, sc_location: 'loc1'},
+        {sc_id: 1, sc_type: "type 1", sc_operator: "operator 1", sc_pow: 100, sc_status: 0, sc_perm: 0, sc_location: 'loc1'},
+        {sc_id: 2, sc_type: "type 1", sc_operator: "operator 1", sc_pow: 100, sc_status: 0, sc_perm: 0, sc_location: 'loc1'},
+        {sc_id: 3, sc_type: "type 2", sc_operator: "operator 2", sc_pow: 1000, sc_status: 0, sc_perm: 0, sc_location: 'loc2'},
+        {sc_id: 4, sc_type: "type 2", sc_operator: "operator 2", sc_pow: 1000, sc_status: 0, sc_perm: 0, sc_location: 'loc2'},
+        {sc_id: 5, sc_type: "type 2", sc_operator: "operator 2", sc_pow: 1000, sc_status: 0, sc_perm: 0, sc_location: 'loc2'}
     ];
+
 
     Scooter.collection.insertMany(scooters, (err, docs) => {
         if (err) {

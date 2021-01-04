@@ -3,7 +3,7 @@ const router = Router();
 const Station = require('../db/station.scema');
 const Slot = require('../db/slot.scema');
 
-router.get("/all1", (req, res) => {
+router.get("/all", (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     let stArr = [];
     let slArr = [];
@@ -30,7 +30,7 @@ router.get("/all1", (req, res) => {
         )
 });
 
-router.get("/all", (req, res) => {
+router.get("/all1", (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     Station.find({}).
         then ( station => {

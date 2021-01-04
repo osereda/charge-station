@@ -3,9 +3,13 @@ const Schema = mongoose.Schema;
 
 const scooterScheme = new Schema(
     {
-        scooter_id: Number,
-        scooter_type: String,
-        scooter_operator: String
+        sc_id: Number,
+        sc_type: String,
+        sc_operator: String,
+        sc_pow: Number,
+        sc_status: Number,
+        sc_perm: Number,
+        sc_location: String
     },
     {versionKey: false}
 );

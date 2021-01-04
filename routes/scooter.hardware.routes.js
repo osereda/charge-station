@@ -18,11 +18,11 @@ router.get("/:id", (req, res) => {
         scooterEvent = parseInt(param.split('&')[2].split('=')[1]);
         let updatedSlot = {
             slot_status: scooterEvent,
-            scooter_id: scooterId,
+            sc_id: scooterId,
             scooter_event: scooterEvent
         }
 
-        Scooter.findOne({scooter_id: scooterId}, (err, scooter) => {
+        Scooter.findOne({sc_id: scooterId}, (err, scooter) => {
             if (err) {
                 console.log(err);
             }
@@ -30,7 +30,7 @@ router.get("/:id", (req, res) => {
                 return res.send({status: 0})
             }
 
-            Slot.updateOne({slot_id: slotId}, updatedSlot,   (err, slot) => {
+            Slot.updateOne({slot_id: slotId}, updatedSlot, (err, slot) => {
                 if (err) {
                     status = 0;
                 }
