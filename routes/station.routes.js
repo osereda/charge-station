@@ -3,6 +3,10 @@ const router = Router();
 const Station = require('../db/station.scema');
 const Slot = require('../db/slot.scema');
 
+
+const Nominatim = require('nominatim-geocoder')
+const geocoder = new Nominatim()
+
 router.get("/all", (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     let stArr = [];
@@ -32,25 +36,16 @@ router.get("/all", (req, res) => {
 
 router.get("/all1", (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
-    Station.find({}).
-        then ( station => {
-             if (station && station.length > 0) {
-                let slotArr = [];
-                station.forEach(item => {
-                    if (item.id_slots.length > 0) {
-                        item.id_slots.forEach(slot => {
-                            Slot.findOne({slot_id: slot})
-                                .then((result) => {
-                                    result ? item.arr_slots.push(result._doc) : null;
-                                    // console.log(station);
-                                })
-                                .then(console.log(station))
-                        })
-                    };
-                });
-            }
-        })
-        .then(station => res.send(station))
+    Station.find({ }, (err, station) => {
+        if(err){
+            console.log(err);
+            return res.status(500).send({error: `cant find station with id ${req.params.id}`});
+        }
+        if(station == null){
+            return res.status(400).send({ error: `station with id:  ${req.params.id} - don't exist` });
+        }
+        res.send(station);
+    });
 });
 
 router.get("/st/:id", (req, res) => {
@@ -75,18 +70,31 @@ router.post("/add", (req, res) => {
             const location = req.body.loc;
             const pic = req.body.pic ? req.body.pic : 'pic1.png';
             const inf = req.body.inf ? req.body.inf : " - ";
-            const station = new Station({
-                st_id: stId,
-                st_slots: slots,
-                location: location,
-                picture: pic,
-                info : inf,
-            });
+            let geodata = '';
 
-            Station.save((err) => {
-                if(err) return res.status(500).send({ error: "cant save station in mongoDB" });
-                res.send(station);
-            });
+            geocoder.search( { q: location })
+                .then(result => {
+                    if(result) {
+                        geodata = result[0].lat + "," + result[0].lon;
+                    }
+                    const station = new Station({
+                        st_id: stId,
+                        id_slots: slots,
+                        arr_slots: [],
+                        location: location,
+                        picture: pic,
+                        info : inf,
+                        geodata: geodata
+                    });
+
+                    station.save((err) => {
+                        if(err) return res.status(500).send({ error: "cant save station in mongoDB" });
+                        res.send(station);
+                    });
+                }).catch((error) => {
+                    console.log(error);
+                })
+
         }
         else {
             res.status(400).send({ error: `station id - ${req.body.stId} already exist` });
@@ -153,8 +161,8 @@ router.delete("/:id", (req, res) => {
 
 router.get("/init", (req, res) => {
     let station = [
-        {st_id: 0, id_slots: [1, 2], arr_slots: [], location: "Oslo,Karla-Uhana,1 ", picture: "pic1.png", info: "-"},
-        {st_id: 1, id_slots: [3], arr_slots: [],  location: "London,Piccadilly,10", picture: "pic2.png", info: "-"}
+        {st_id: 0, id_slots: [1, 2], arr_slots: [], location: "Oslo,Karla-Uhana,1 ", picture: "pic1.png", info: "-", geodata: "51.4949045, 31.2946714"},
+        {st_id: 1, id_slots: [3, 2], arr_slots: [],  location: "London,Piccadilly,10", picture: "pic2.png", info: "-", geodata: "51.0, 31.0"}
     ];
 
     Station.collection.insertMany(station, (err, docs) => {

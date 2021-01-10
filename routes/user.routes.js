@@ -3,6 +3,7 @@ const router = Router();
 const USER = require('../db/user.scema');
 
 router.get("/all", (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
     USER.find({}, (err, users) => {
         if(err)
         {
@@ -13,7 +14,7 @@ router.get("/all", (req, res) => {
     });
 });
 
-router.get("/us/:id", (req, res) => {
+router.get("/us/?:id", (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     USER.findOne({username: req.params.id }, (err, user) => {
         if(err)

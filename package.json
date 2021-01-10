@@ -18,6 +18,7 @@
     "express": "^4.17.1",
     "mongodb": "^3.1.0",
     "mongoose": "^5.11.8",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "nominatim-geocoder": "^0.1.4"
   }
 }

@@ -8,7 +8,8 @@ const stationScheme = new Schema(
         arr_slots: [{}],
         location: String,
         picture: String,
-        info: String
+        info: String,
+        geodata: String
     },
     {versionKey: false}
 );
