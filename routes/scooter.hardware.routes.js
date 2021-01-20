@@ -34,7 +34,7 @@ router.get("/:id", (req, res) => {
                 if (err) {
                     status = 0;
                 }
-                if (slot == null || slot.nModified === 0) {
+                if (slot == null || slot.nModified === 0 && slot.n === 0) {
                     status = 0;
                 }
                 if (status !== 0) {
