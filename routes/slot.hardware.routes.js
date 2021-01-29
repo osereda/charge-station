@@ -40,10 +40,10 @@ router.get ("/:id", (req, res) => {
                     if (err) {
                         stationStatus = 0;
                     }
-                    if (slot == null || slot.nModified === 0) {
+                    if (slot == null || slot.nModified === 0 && slot.n === 0) {
                         stationStatus = 0;
                     }
-                    if (i === countOfSlot - 1 && stationStatus !== 0) {
+                    if (i === countOfSlot - 1 && stationStatus !== 0 && slot.n !== 0) {
                         res.send({status: 1});
                     }
                     if (i === countOfSlot - 1 && stationStatus === 0) {

@@ -161,7 +161,7 @@ router.delete("/:id", (req, res) => {
 
 router.get("/init", (req, res) => {
     let station = [
-        {st_id: 0, id_slots: [1, 2], arr_slots: [], location: "Oslo,Karla-Uhana,1 ", picture: "pic1.png", info: "-", geodata: "51.4949045, 31.2946714"},
+        {st_id: 0, id_slots: [1, 2, 1], arr_slots: [], location: "Oslo,Karla-Uhana,1 ", picture: "pic1.png", info: "-", geodata: "51.4949045, 31.2946714"},
         {st_id: 1, id_slots: [3, 2], arr_slots: [],  location: "London,Piccadilly,10", picture: "pic2.png", info: "-", geodata: "51.0, 31.0"}
     ];
 

@@ -35,6 +35,7 @@ router.post("/add", (req, res) => {
             const slotId = req.body.slotId;
             const scooterId = req.body.scooterId;
             const slotStatus = req.body.slotStatus;
+            const slotInfo = req.body.slotInfo;
             const slotPower = req.body.slotPower ? req.body.slotPower : 0;
             const scooterEvent = req.body.scooterEvent ? req.body.scooterEvent : 0;
             const slot = new Slot({
@@ -42,6 +43,7 @@ router.post("/add", (req, res) => {
                 scooter_id: scooterId,
                 slot_status: slotStatus,
                 slot_power: slotPower,
+                slot_info: slotInfo,
                 scooter_event : scooterEvent,
             });
             slot.save((err) => {
@@ -60,13 +62,15 @@ router.put("/update", (req, res) => {
     const slotId = req.body.slotId;
     const scooterId = req.body.scooterId;
     const slotStatus = req.body.slotStatus;
+    const slotInfo = req.body.slotInfo;
     const slotPower = req.body.slotPower ? req.body.slotPower : 0;
     const scooterEvent = req.body.scooterEvent ? req.body.scooterEvent : 0;
     const newSlot = {
         scooter_id: scooterId,
         slot_status: slotStatus,
         slot_power: slotPower,
-        scooter_event : scooterEvent,
+        slot_info: slotInfo,
+        scooter_event : scooterEvent
     };
     try {
         Slot.updateOne({slot_id: slotId}, newSlot, (err, slot) => {
@@ -113,9 +117,11 @@ router.delete("/:id", (req, res) => {
 
 router.get("/init", (req, res) => {
     let slots = [
-            {slot_id: 0, scooter_id: 11, slot_status: 0, slot_power: 100, scooter_event: 0},
-            {slot_id: 1, scooter_id: 12, slot_status: 0, slot_power: 100, scooter_event: 0},
-            {slot_id: 2, scooter_id: 13, slot_status: 0, slot_power: 100, scooter_event: 0}
+            {slot_id: 524325, scooter_id: 11, slot_status: 0, slot_info: 1, slot_power: 100, scooter_event: 0},
+            {slot_id: 327717, scooter_id: 12, slot_status: 0, slot_info: 1, slot_power: 100, scooter_event: 0},
+            {slot_id: 262181, scooter_id: 13, slot_status: 0, slot_info: 1, slot_power: 100, scooter_event: 0},
+            {slot_id: 393253, scooter_id: 13, slot_status: 0, slot_info: 1, slot_power: 100, scooter_event: 0},
+            {slot_id: 458789, scooter_id: 13, slot_status: 0, slot_info: 1, slot_power: 100, scooter_event: 0}
         ];
 
     Slot.collection.insertMany(slots, (err, docs) => {

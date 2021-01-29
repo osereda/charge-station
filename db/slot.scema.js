@@ -7,6 +7,7 @@ const slotScheme = new Schema(
         scooter_id: Number,
         slot_status: Number,
         slot_power : Number,
+        slot_info : Number,
         scooter_event : Number
     },
     {versionKey: false}
