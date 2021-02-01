@@ -22,6 +22,10 @@ router.get ("/:id", (req, res) => {
             scooterId = parseInt(param.split('&')[i++].split('=')[1]);
             status = param.split('&')[i++].split('=')[1];
             slotPower = param.split('&')[i++].split('=')[1];
+            console.log("slotId ---> " + slotId);
+            console.log("scooterId ---> " + scooterId);
+            console.log("status ---> " + status);
+            console.log("slotPower ---> " + slotPower);
 
             let tmp = {
                 slot_id: slotId,
@@ -38,15 +42,19 @@ router.get ("/:id", (req, res) => {
             newSlotCollection.forEach((item, i) => {
                 Slot.updateOne({slot_id: item.slot_id}, item.newDate, (err, slot) => {
                     if (err) {
+                        console.log("err ---> " + err);
                         stationStatus = 0;
                     }
                     if (slot == null || slot.nModified === 0 && slot.n === 0) {
+                        console.log("Station n Modified ---> " + slot.nModified + "slot.n-> " + slot.n);
                         stationStatus = 0;
                     }
                     if (i === countOfSlot - 1 && stationStatus !== 0 && slot.n !== 0) {
+                        console.log("Station Status OK ---> " + stationStatus);
                         res.send({status: 1});
                     }
                     if (i === countOfSlot - 1 && stationStatus === 0) {
+                        console.log("Station Status NOT GOOD ---> " + stationStatus);
                         res.send({status: 0});
                     }
                 });
