@@ -43,19 +43,18 @@ router.get ("/:id", (req, res) => {
                 Slot.updateOne({slot_id: item.slot_id}, item.newDate, (err, slot) => {
                     if (err) {
                         console.log("err ---> " + err);
-                        stationStatus = 0;
+                        stationStatus = 2;
+                        res.send({status: stationStatus});
                     }
                     if (slot == null || slot.nModified === 0 && slot.n === 0) {
                         console.log("Station n Modified ---> " + slot.nModified + "slot.n-> " + slot.n);
                         stationStatus = 0;
-                    }
-                    if (i === countOfSlot - 1 && stationStatus !== 0 && slot.n !== 0) {
-                        console.log("Station Status OK ---> " + stationStatus);
-                        res.send({status: 1});
-                    }
-                    if (i === countOfSlot - 1 && stationStatus === 0) {
                         console.log("Station Status NOT GOOD ---> " + stationStatus);
-                        res.send({status: 0});
+                        res.send({status: stationStatus});
+                    }
+                    else {
+                        console.log("Station Status OK ---> ");
+                        res.send({status: 1});
                     }
                 });
             });
