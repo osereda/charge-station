@@ -44,6 +44,7 @@ router.get ("/:id", (req, res) => {
                 .then ( station => {
                     if(scooterId !== 0 && station.length === 0){
                         stationStatus=0;
+                        console.log("station.length  ---> " + station.length);
                         res.send({status: 0});
                     } else {
                         newSlotCollection.forEach((item, i) => {
