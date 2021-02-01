@@ -1,6 +1,7 @@
 const {Router} = require('express');
 const router = Router();
 const Slot = require('../db/slot.scema');
+const Scooter = require('../db/scooter.scema');
 
 router.get ("/:id", (req, res) => {
 
@@ -39,32 +40,39 @@ router.get ("/:id", (req, res) => {
         }
         try {
             stationStatus = null;
-            newSlotCollection.forEach((item, i) => {
-                Slot.updateOne({slot_id: item.slot_id}, item.newDate, (err, slot) => {
-                    if (err) {
-                        console.log("err ---> " + err);
-                        stationStatus = 2;
-                        res.send({status: stationStatus});
+            Scooter.find({sc_id: scooterId})
+                .then ( station => {
+                    if(scooterId !== 0 && station.length === 0){
+                        stationStatus=0;
+                        res.send({status: 0});
+                    } else {
+                        newSlotCollection.forEach((item, i) => {
+                            Slot.updateOne({slot_id: item.slot_id}, item.newDate, (err, slot) => {
+                                if (err) {
+                                    console.log("err ---> " + err);
+                                    stationStatus = 2;
+                                    res.send({status: stationStatus});
+                                }
+                                if (slot == null || slot.nModified === 0 && slot.n === 0) {
+                                    console.log("Station n Modified ---> " + slot.nModified + "slot.n-> " + slot.n);
+                                    stationStatus = 0;
+                                    console.log("Station Status NOT GOOD ---> " + stationStatus);
+                                    res.send({status: stationStatus});
+                                }
+                                else {
+                                    console.log("Station Status OK ---> ");
+                                    res.send({status: 1});
+                                }
+                            });
+                        });
                     }
-                    if (slot == null || slot.nModified === 0 && slot.n === 0) {
-                        console.log("Station n Modified ---> " + slot.nModified + "slot.n-> " + slot.n);
-                        stationStatus = 0;
-                        console.log("Station Status NOT GOOD ---> " + stationStatus);
-                        res.send({status: stationStatus});
-                    }
-                    else {
-                        console.log("Station Status OK ---> ");
-                        res.send({status: 1});
-                    }
-                });
-            });
+                })
+
         }
         catch (err) {
             console.log(err);
         }
-
     }
-
 });
 
 module.exports = router;
