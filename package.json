@@ -12,18 +12,21 @@
   "author": "osereda",
   "license": "ISC",
   "dependencies": {
+    "@log4js-node/slack": "^1.0.0",
     "body-parser": "^1.19.0",
     "concurrently": "^5.3.0",
     "config": "^3.3.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "log4js": "^6.3.0",
     "mongodb": "^3.1.0",
     "mongoose": "^5.11.8",
     "nodemon": "^2.0.4",
     "nominatim-geocoder": "^0.1.4",
     "passport": "^0.4.1",
     "passport-http": "^0.3.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "cookie-parser": "^1.4.5",
