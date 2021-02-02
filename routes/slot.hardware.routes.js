@@ -30,6 +30,7 @@ router.get ("/:id", (req, res) => {
             slotId = parseInt(param.split('&')[i++].split('=')[1]);
             // scooterId = parseInt(param.split('&')[i++].split('=')[1]);
 
+            logger.info("param: "+param);
             tmp1 = param.split('&')[i++];
             logger.info("tmp1: "+tmp1);
             tmp2 = tmp1.split('=')[1];
