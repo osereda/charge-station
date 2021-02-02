@@ -19,34 +19,45 @@ router.get ("/:id", (req, res) => {
     let stationStatus = null;
     let newSlotCollection = [];
     let countOfSlot = 0;
+    let tmp1 = '';
+    let tmp2 = '';
+    let tmp3 = 0;
 
     if(req.params.id) {
         const param = req.params.id.replace(/\s/g, '');
         let count = (param.match(/&/g) || []).length;
         for(let i = 0; i < count; countOfSlot++) {
             slotId = parseInt(param.split('&')[i++].split('=')[1]);
-            scooterId = parseInt(param.split('&')[i++].split('=')[1]);
+            // scooterId = parseInt(param.split('&')[i++].split('=')[1]);
+
+            tmp1 = param.split('&')[i++];
+            logger.info("tmp1: "+tmp1);
+            tmp2 = tmp1.split('=')[1];
+            logger.info("tmp2: "+tmp2);
+            tmp3 = parseInt(tmp2,16);
+            logger.info("tmp3: "+tmp3);
+
             status = param.split('&')[i++].split('=')[1];
             slotPower = param.split('&')[i++].split('=')[1];
             console.log("sl_id:  " + slotId);
-            console.log("sc_id:  " + scooterId);
+            // console.log("sc_id:  " + scooterId);
             logger.info("slot update param - sl_id:" + slotId
-                + " sc_id:  " + scooterId + "status: " + status + "slot power: " + slotPower);
+                + " sc_id:  " + scooterId + " status: " + status + "slot power: " + slotPower);
             let tmp = {
                 slot_id: slotId,
                 newDate: {
-                    scooter_id: scooterId,
+                    scooter_id: tmp3,
                     slot_status: status,
-                    slot_power: slotPower,
+                    slot_power: slotPower
                 }
             }
             newSlotCollection.push(tmp);
         }
         try {
             stationStatus = null;
-            Scooter.find({sc_id: scooterId})
+            Scooter.find({sc_id: tmp3})
                 .then ( scooter => {
-                    if(scooterId !== 0 && scooter.length === 0){
+                    if(tmp3 !== 0 && scooter.length === 0){
                         stationStatus=0;
                         console.log("slot update - scooter not found: " + scooter.length);
                         logger.info("slot update - scooter not found: " + scooterId);
