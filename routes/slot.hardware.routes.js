@@ -24,13 +24,15 @@ router.get ("/:id", (req, res) => {
     let tmp3 = 0;
 
     if(req.params.id) {
+        logger.info("req.params.id: "+req.params.id);
         const param = req.params.id.replace(/\s/g, '');
+        logger.info("param1: "+param);
         let count = (param.match(/&/g) || []).length;
         for(let i = 0; i < count; countOfSlot++) {
             slotId = parseInt(param.split('&')[i++].split('=')[1]);
             // scooterId = parseInt(param.split('&')[i++].split('=')[1]);
 
-            logger.info("param: "+param);
+            logger.info("param2: "+param);
             tmp1 = param.split('&')[i++];
             logger.info("tmp1: "+tmp1);
             tmp2 = tmp1.split('=')[1];
