@@ -12,10 +12,10 @@ router.get ("/:id", (req, res) => {
 
     res.set('Access-Control-Allow-Origin', '*');
 
-    let slotId;
-    let scooterId;
-    let status;
-    let slotPower;
+    let slotId = 0;
+    let scooterId = 0;
+    let status = 0;
+    let slotPower = 0;
     let stationStatus = null;
     let newSlotCollection = [];
     let countOfSlot = 0;
@@ -31,7 +31,7 @@ router.get ("/:id", (req, res) => {
             console.log("sl_id:  " + slotId);
             console.log("sc_id:  " + scooterId);
             logger.info("slot update param - sl_id:" + slotId
-                + " sc_id:  " + "status: " + status + "slot power: " + slotPower);
+                + " sc_id:  " + scooterId + "status: " + status + "slot power: " + slotPower);
             let tmp = {
                 slot_id: slotId,
                 newDate: {
