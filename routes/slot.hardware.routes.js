@@ -8,8 +8,12 @@ const logger = log4js.getLogger();
 logger.level = "info";
 // logger.level = "error";
 
+let paramStr ='';
+
 router.get ("/:id", (req, res) => {
 
+    paramStr = req.params.id;
+    logger.info("req.params.id: "+paramStr);
     res.set('Access-Control-Allow-Origin', '*');
 
     let slotId = 0;
@@ -24,8 +28,8 @@ router.get ("/:id", (req, res) => {
     let tmp3 = 0;
 
     if(req.params.id) {
-        logger.info("req.params.id: "+req.params.id);
-        const param = req.params.id.replace(/\s/g, '');
+        logger.info("paramStr: "+paramStr);
+        const param = paramStr.replace(/\s/g, '');
         logger.info("param1: "+param);
         let count = (param.match(/&/g) || []).length;
         for(let i = 0; i < count; countOfSlot++) {
