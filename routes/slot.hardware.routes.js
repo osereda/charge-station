@@ -2,6 +2,7 @@ const {Router} = require('express');
 const router = Router();
 const Slot = require('../db/slot.scema');
 const Scooter = require('../db/scooter.scema');
+const Station = require('../db/station.scema')
 const loggerXXX = require('../modules/logger');
 const log4js = require("log4js");
 const logger = log4js.getLogger();
@@ -16,6 +17,7 @@ router.get ("/:id", (req, res) => {
     logger.info("req.params.id: "+paramStr);
     res.set('Access-Control-Allow-Origin', '*');
 
+    let stationId = 0;
     let slotId = 0;
     let scooterId = 0;
     let status = 0;
@@ -45,6 +47,27 @@ router.get ("/:id", (req, res) => {
             newSlotCollection.push(tmp);
         }
         try {
+            Station.find()
+                .then ( stations => {
+                    if (stations.length !== 0) {
+                        stations.forEach(st => {
+                            st._doc.id_slots.forEach( slot =>
+                                {newSlotCollection.forEach(item => {
+                                    if (slot-0 === item.slot_id){
+                                        Scooter.updateOne({sc_id: item.newDate.scooter_id},{sc_location: st._doc.st_id}, (err, scoot) => {
+                                            if (err) {
+                                                logger.error("error - " + err);
+                                                console.log(("error - " + err));
+                                            } else {
+                                                logger.info("scooter # "+ item.newDate.scooter_id +"  update location to: " + st._doc.st_id);
+                                            }
+                                        })
+                                    }
+                                })}
+                            )
+                        })
+                    }
+                })
             stationStatus = null;
             Scooter.find({sc_id: scooterId})
                 .then ( scooter => {
@@ -54,6 +77,7 @@ router.get ("/:id", (req, res) => {
                         logger.info("slot update - scooter not found: " + scooterId);
                         res.send({status: 0});
                     } else {
+                        // Scooter.updateOne({sc_id: scooterId}, location:)
                         newSlotCollection.forEach((item, i) => {
                             Slot.updateOne({slot_id: item.slot_id}, item.newDate, (err, slot) => {
                                 if (err) {
