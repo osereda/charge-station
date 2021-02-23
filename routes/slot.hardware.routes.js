@@ -54,7 +54,8 @@ router.get ("/:id", (req, res) => {
                             st._doc.id_slots.forEach( slot =>
                                 {newSlotCollection.forEach(item => {
                                     if (slot-0 === item.slot_id){
-                                        Scooter.updateOne({sc_id: item.newDate.scooter_id},{sc_location: st._doc.st_id}, (err, scoot) => {
+                                        Scooter.updateOne({sc_id: item.newDate.scooter_id},
+                                            {sc_location: (item.newDate.slot_status-0 === 1 ? st._doc.st_id : "-")}, (err, scoot) => {
                                             if (err) {
                                                 logger.error("error - " + err);
                                                 console.log(("error - " + err));
