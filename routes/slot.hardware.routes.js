@@ -72,7 +72,7 @@ router.get ("/:id", (req, res) => {
                                                             service_bl_power: item.newDate.slot_power,
                                                             service_bl_status: 1
                                                         }, (err, serviceBilling) => {
-                                                            console.log("serviceBilling START" + serviceBilling);
+
                                                         })
                                                 }
                                                 if(item.newDate.slot_status-0 === 1 && billingServiceItem.service_bl_status === 1){
@@ -80,7 +80,7 @@ router.get ("/:id", (req, res) => {
                                                         {
                                                             service_bl_power: item.newDate.slot_power,
                                                         }, (err, serviceBilling) => {
-                                                            console.log("serviceBilling ADD POWER" + serviceBilling);
+
                                                         })
                                                 }
                                                 if(item.newDate.slot_status-0 === 0 && billingServiceItem.service_bl_status === 1){
@@ -106,29 +106,31 @@ router.get ("/:id", (req, res) => {
                                                                 .then(billing => {
                                                                     let tmpDate = billing[0] ? billing[0]._doc.bl_date.getDate() : null;
                                                                     dateForFilter = billing[0] ? billing[0]._doc.bl_date : null;
-                                                                    powerBilling = billing[0] ? billing[0]._doc.bl_pow + (item.newDate.slot_power-0) : null;
-                                                                    timeBilling = chargeTimePower + billing[0]._doc.bl_time;
+                                                                    timeBilling = chargeTimePower;
                                                                     countScooterEvent = billing[0]._doc.bl_scooter_event;
                                                                     if(tmpDate !== billingDate){
+                                                                        powerBilling = (item.newDate.slot_power-0)/1000;
                                                                         let newBillingRecord = new Balance({
                                                                             bl_date: new Date(),
                                                                             bl_location: "-",
                                                                             bl_scooter_event: 1,
                                                                             bl_pow: powerBilling,
-                                                                            bl_time: timeBilling,
+                                                                            bl_time: chargeTimePower,
                                                                             bl_price: powerBilling * 0.1
                                                                         })
                                                                         newBillingRecord.save((err => {
                                                                             console.log("err" + err);
                                                                         }))
                                                                     } else {
+                                                                        powerBilling = billing[0] ? billing[0]._doc.bl_pow + ((item.newDate.slot_power-0)/1000) : null;
+                                                                        timeBilling = chargeTimePower + billing[0]._doc.bl_time;
                                                                         Balance.updateOne( {bl_date: dateForFilter}, {
                                                                             bl_pow:  powerBilling,
                                                                             bl_time: timeBilling,
                                                                             bl_price: powerBilling * 0.1,
                                                                             bl_scooter_event: ++countScooterEvent,
                                                                         }, (err, billing) => {
-                                                                            console.log("billing" + billing);
+
                                                                         })
                                                                     }
                                                                 })
