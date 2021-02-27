@@ -16,9 +16,9 @@ exports.getAll = (req, res) => {
 exports.init = (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     let balance = [
-        {bl_date: new Date(), bl_pow: 117, bl_time: 1000, bl_price: 0.11},
-        {bl_date: new Date("2021-02-25"), bl_pow: 118, bl_time: 1001, bl_price: 0.11},
-        {bl_date: new Date("2021-02-26"), bl_pow: 119, bl_time: 1021, bl_price: 0.12}
+        {bl_date: new Date(), bl_pow: 117, bl_scooter_event: 0, bl_time: 1000, bl_price: 0.11},
+        {bl_date: new Date("2021-02-25"), bl_scooter_event: 1, bl_pow: 118, bl_time: 1001, bl_price: 0.11},
+        {bl_date: new Date("2021-02-26"), bl_scooter_event: 2, bl_pow: 119, bl_time: 1021, bl_price: 0.12}
     ];
 
     BALANCE.collection.insertMany(balance, (err, docs) => {

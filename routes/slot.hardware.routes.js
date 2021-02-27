@@ -101,17 +101,19 @@ router.get ("/:id", (req, res) => {
                                                             let dateForFilter = null;
                                                             let powerBilling;
                                                             let timeBilling;
+                                                            let countScooterEvent;
                                                             Balance.find().limit(1).sort({$natural:-1})
                                                                 .then(billing => {
                                                                     let tmpDate = billing[0] ? billing[0]._doc.bl_date.getDate() : null;
                                                                     dateForFilter = billing[0] ? billing[0]._doc.bl_date : null;
                                                                     powerBilling = billing[0] ? billing[0]._doc.bl_pow + (item.newDate.slot_power-0) : null;
-                                                                    timeBilling = chargeTimePower +billing[0]._doc.bl_time;
+                                                                    timeBilling = chargeTimePower + billing[0]._doc.bl_time;
+                                                                    countScooterEvent = billing[0]._doc.bl_scooter_event;
                                                                     if(tmpDate !== billingDate){
                                                                         let newBillingRecord = new Balance({
                                                                             bl_date: new Date(),
                                                                             bl_location: "-",
-                                                                            bl_scooter_event: 0,
+                                                                            bl_scooter_event: 1,
                                                                             bl_pow: powerBilling,
                                                                             bl_time: timeBilling,
                                                                             bl_price: powerBilling * 0.1
@@ -123,7 +125,8 @@ router.get ("/:id", (req, res) => {
                                                                         Balance.updateOne( {bl_date: dateForFilter}, {
                                                                             bl_pow:  powerBilling,
                                                                             bl_time: timeBilling,
-                                                                            bl_price: powerBilling * 0.1
+                                                                            bl_price: powerBilling * 0.1,
+                                                                            bl_scooter_event: ++countScooterEvent,
                                                                         }, (err, billing) => {
                                                                             console.log("billing" + billing);
                                                                         })
@@ -186,11 +189,9 @@ router.get ("/:id", (req, res) => {
                                     logger.info("slot update - SLOT NOT FOUND: " + item.slot_id);
                                     res.send({status: stationStatus});
                                 }
-                                else {
-                                    res.send({status: 1});
-                                }
                             });
                         });
+                        res.send({status: 1});
                     }
                 })
 
