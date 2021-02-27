@@ -121,10 +121,10 @@ router.get("/deleteall", (req, res) => {
 
 router.get("/init", (req, res) => {
     let scooters = [
-        {sc_id: 0, sc_type: "type 1", sc_operator: "operator 1", sc_pow: 100, sc_status: 1, sc_perm: 1, sc_location: 'loc1'},
-        {sc_id: 1, sc_type: "type 1", sc_operator: "operator 1", sc_pow: 100, sc_status: 1, sc_perm: 1, sc_location: 'loc1'},
-        {sc_id: 2, sc_type: "type 1", sc_operator: "operator 1", sc_pow: 100, sc_status: 1, sc_perm: 1, sc_location: 'loc1'},
-        {sc_id: 3, sc_type: "type 2", sc_operator: "operator 2", sc_pow: 1000, sc_status: 0, sc_perm: 1, sc_location: 'loc2'},
+        {sc_id: 2993343100, sc_type: "type 1", sc_operator: "operator 1", sc_pow: 100, sc_status: 1, sc_perm: 1, sc_location: 'loc1'},
+        {sc_id: 2993343032, sc_type: "type 1", sc_operator: "operator 1", sc_pow: 100, sc_status: 1, sc_perm: 1, sc_location: 'loc1'},
+        {sc_id: 2993342988, sc_type: "type 1", sc_operator: "operator 1", sc_pow: 100, sc_status: 1, sc_perm: 1, sc_location: 'loc1'},
+        {sc_id: 2993343180, sc_type: "type 2", sc_operator: "operator 2", sc_pow: 1000, sc_status: 0, sc_perm: 1, sc_location: 'loc2'},
         {sc_id: 4, sc_type: "type 2", sc_operator: "operator 2", sc_pow: 1000, sc_status: 0, sc_perm: 1, sc_location: 'loc2'},
         {sc_id: 5, sc_type: "type 2", sc_operator: "operator 2", sc_pow: 1000, sc_status: 3, sc_perm: 1, sc_location: 'loc2'}
     ];
