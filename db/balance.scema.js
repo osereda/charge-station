@@ -8,7 +8,8 @@ const balanceScheme = new Schema(
         bl_scooter_event: Number,
         bl_pow: Number,
         bl_time: Number,
-        bl_price: Number
+        bl_price: Number,
+        bl_balance: Number
     },
     {versionKey: false}
 );
