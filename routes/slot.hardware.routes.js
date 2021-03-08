@@ -116,7 +116,8 @@ router.get ("/:id", (req, res) => {
                                                                             bl_scooter_event: 1,
                                                                             bl_pow: powerBilling,
                                                                             bl_time: chargeTimePower,
-                                                                            bl_price: powerBilling * 0.1
+                                                                            bl_price: powerBilling * 0.1,
+                                                                            bl_balance: 100
                                                                         })
                                                                         newBillingRecord.save((err => {
                                                                             console.log("err" + err);
