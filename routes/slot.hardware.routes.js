@@ -65,7 +65,7 @@ router.get ("/:id", (req, res) => {
                                         serviceBalance.findOne({service_bl_sl_id: item.slot_id})
                                             .then(billingServiceItem => {
                                                 if(item.newDate.slot_status-0 === 1 && billingServiceItem.service_bl_status === 0){
-                                                    let startDate = new Date().valueOf();
+                                                    let startDate = (new Date().valueOf())/1000;
                                                     serviceBalance.updateOne({service_bl_sl_id: item.slot_id},
                                                         {
                                                             service_bl_time_start: startDate,
@@ -84,7 +84,7 @@ router.get ("/:id", (req, res) => {
                                                         })
                                                 }
                                                 if(item.newDate.slot_status-0 === 0 && billingServiceItem.service_bl_status === 1){
-                                                    let endDate = new Date().valueOf();
+                                                    let endDate = (new Date().valueOf())/1000;
                                                     chargeBillingPower = chargeBillingPower + item.newDate.slot_power;
                                                     serviceBalance.findOneAndUpdate({service_bl_sl_id: item.slot_id},
                                                         {
@@ -95,8 +95,8 @@ router.get ("/:id", (req, res) => {
                                                         if(err){
                                                             console.log("err");
                                                         }
-                                                            let tmpDate = new Date().valueOf();
-                                                            chargeTimePower = (tmpDate - serviceBilling._doc.service_bl_time_start)/1000;
+                                                            let tmpDate = (new Date().valueOf())/1000;
+                                                            chargeTimePower = (tmpDate - serviceBilling._doc.service_bl_time_start);
                                                             let billingDate = new Date().getDate();
                                                             let dateForFilter = null;
                                                             let powerBilling;
