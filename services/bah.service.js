@@ -11,7 +11,7 @@ class BahService {
     async addBah(inputData) {
         if(inputData) {
             const latRecordBah = await Bah.getLastRecord();
-            const checkDate = latRecordBah[0]._doc.bah_date.getDate() === new Date().getDate() ? false : true;
+            const checkDate = true;//latRecordBah[0]._doc.bah_date.getDate() === new Date().getDate() ? false : true;
             if(checkDate) {
                 const currentAld = 100;//latRecordBah[0]._doc.bah_balance_current;
                 const amount = inputData * 0.01;
