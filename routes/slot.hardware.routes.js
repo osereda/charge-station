@@ -11,6 +11,9 @@ const logger = log4js.getLogger();
 logger.level = "info";
 // logger.level = "error";
 
+const BahService = require('../services/bah.service');
+let bahService = new BahService;
+
 const moment = require('moment-timezone');
 const dateThailand = moment.tz(Date.now(), "Europe/Kiev");
 
@@ -99,7 +102,7 @@ router.get ("/:id", (req, res) => {
                                                             chargeTimePower = (tmpDate - serviceBilling._doc.service_bl_time_start);
                                                             let billingDate = new Date().getDate();
                                                             let dateForFilter = null;
-                                                            let powerBilling;
+                                                            let powerBilling = 0;
                                                             let timeBilling;
                                                             let countScooterEvent;
                                                             Balance.find().limit(1).sort({$natural:-1})
@@ -119,12 +122,16 @@ router.get ("/:id", (req, res) => {
                                                                             bl_price: powerBilling * 0.1,
                                                                             bl_balance: 100
                                                                         })
+                                                                        //TODO check result
+                                                                        const bahResult = bahService.addBah(powerBilling);
                                                                         newBillingRecord.save((err => {
                                                                             console.log("err" + err);
                                                                         }))
                                                                     } else {
                                                                         powerBilling = billing[0] ? billing[0]._doc.bl_pow + ((item.newDate.slot_power-0)/1000) : null;
                                                                         timeBilling = chargeTimePower + billing[0]._doc.bl_time;
+                                                                        //TODO heck result
+                                                                        const bahResult = bahService.addBah(powerBilling);
                                                                         Balance.updateOne( {bl_date: dateForFilter}, {
                                                                             bl_pow:  powerBilling,
                                                                             bl_time: timeBilling,

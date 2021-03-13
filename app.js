@@ -15,7 +15,18 @@ app.use('/api/slot', require('./routes/slot.routes'));
 app.use('/api/user', require('./routes/user.routes'));
 app.use('/api/station', require('./routes/station.routes'));
 app.use('/api/balance', require('./routes/balance.routes'));
+app.use('/api/bah', require('./routes/bah.routes'));
+// app.use('/api', require('./routes/users'));
 
+// require('./db/user.scema.js');
+// app.use(require('./routes'));
+// require('./config/passport');
+
+// mongoose.promise = global.Promise;
+////app.use(session({ secret: 'passport-tutorial', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }))
+
+
+///////////////////
 
 
 const PORT = config.get('port') || 5000;

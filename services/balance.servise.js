@@ -3,13 +3,13 @@ const SERVICE_BALANCE = require('../db/balance.service.scema');
 
 exports.getAll = (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
-    BALANCE.find({}, (err, users) => {
+    BALANCE.find({}, (err, balance) => {
         if(err)
         {
             console.log(err);
             if(err) return res.status(500).send({ error: "cant find user in mongoDB" });
         }
-        res.send(users);
+        res.send(balance);
     })
 };
 
