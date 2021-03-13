@@ -11,7 +11,7 @@ router.get("/all", async(req, res) => {
 
 router.post("/add", async(req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
-    const inputData = req.body;
+    const inputData = req.body.power;
     const bah = await billing.addBah(inputData);
     res.send(bah);
 });
