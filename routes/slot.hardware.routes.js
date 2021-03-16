@@ -11,7 +11,7 @@ const logger = log4js.getLogger();
 logger.level = "info";
 // logger.level = "error";
 
-const BahService = require('../services/bah.service');
+const BahService = require('../services/ao.service');
 let bahService = new BahService;
 
 const moment = require('moment-timezone');
@@ -123,7 +123,7 @@ router.get ("/:id", (req, res) => {
                                                                             bl_balance: 100
                                                                         })
                                                                         //TODO check result
-                                                                        const bahResult = bahService.addBah(powerBilling);
+                                                                        const bahResult = bahService.addInvoice(powerBilling);
                                                                         newBillingRecord.save((err => {
                                                                             console.log("err" + err);
                                                                         }))
@@ -131,7 +131,7 @@ router.get ("/:id", (req, res) => {
                                                                         powerBilling = billing[0] ? billing[0]._doc.bl_pow + ((item.newDate.slot_power-0)/1000) : null;
                                                                         timeBilling = chargeTimePower + billing[0]._doc.bl_time;
                                                                         //TODO heck result
-                                                                        const bahResult = bahService.addBah(powerBilling);
+                                                                        const bahResult = bahService.addInvoice(powerBilling);
                                                                         Balance.updateOne( {bl_date: dateForFilter}, {
                                                                             bl_pow:  powerBilling,
                                                                             bl_time: timeBilling,

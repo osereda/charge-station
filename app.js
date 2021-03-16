@@ -15,7 +15,7 @@ app.use('/api/slot', require('./routes/slot.routes'));
 app.use('/api/user', require('./routes/user.routes'));
 app.use('/api/station', require('./routes/station.routes'));
 app.use('/api/balance', require('./routes/balance.routes'));
-app.use('/api/bah', require('./routes/bah.routes'));
+app.use('/api/ao', require('./routes/ao.routes'));
 // app.use('/api', require('./routes/users'));
 
 // require('./db/user.scema.js');
